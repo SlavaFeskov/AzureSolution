@@ -7,17 +7,18 @@ namespace WebApplication1.Controllers;
 
 public class HomeController : Controller
 {
+    private readonly IProductService _productService;
     private readonly ILogger<HomeController> _logger;
 
-    public HomeController(ILogger<HomeController> logger)
+    public HomeController(ILogger<HomeController> logger, IProductService productService)
     {
         _logger = logger;
+        _productService = productService;
     }
 
     public IActionResult Index()
     {
-        var service = new ProductService();
-        var products = service.GetProducts();
+        var products = _productService.GetProducts();
         return View(products);
     }
 

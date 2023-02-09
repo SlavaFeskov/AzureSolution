@@ -3,22 +3,18 @@ using AzureWebApp.Models;
 
 namespace AzureWebApp.Services;
 
-// This service will interact with our Product data in the SQL database
-public class ProductService
+public class ProductService : IProductService
 {
-    private static string db_source = "vf-db-server.database.windows.net";
-    private static string db_user = "viachaslau_fiaskou";
-    private static string db_password = "123Eliran-Morkovka123";
-    private static string db_database = "appdb";
+    private readonly IConfiguration _configuration;
+
+    public ProductService(IConfiguration configuration)
+    {
+        this._configuration = configuration;
+    }
 
     private SqlConnection GetConnection()
     {
-        var _builder = new SqlConnectionStringBuilder();
-        _builder.DataSource = db_source;
-        _builder.UserID = db_user;
-        _builder.Password = db_password;
-        _builder.InitialCatalog = db_database;
-        return new SqlConnection(_builder.ConnectionString);
+        return new SqlConnection(_configuration.GetConnectionString("SQLConnection"));
     }
 
     public List<Product> GetProducts()
