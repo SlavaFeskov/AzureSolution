@@ -1,10 +1,16 @@
-﻿@model IEnumerable<AzureWebApp.Models.Product>
+﻿@model AzureWebApp.Models.IndexModel
 @{
     ViewData["Title"] = "Home page";
 }
 
 <div class="text-center">
     <h2>Main</h2>
+
+    @if (Model.IsBeta)
+    {
+        <h2>This is the beta version of the application.</h2>
+    }
+
     <table class="table table-bordered">
         <thead>
         <tr>
@@ -15,7 +21,7 @@
         </thead>
         <tbody>
     
-        @foreach(var product in Model)
+        @foreach(var product in Model.Products)
         {
             <tr>
                 <th scope="row">@product.ProductID</th>

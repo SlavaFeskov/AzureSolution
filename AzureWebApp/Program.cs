@@ -1,14 +1,17 @@
 using AzureWebApp.Services;
+using Microsoft.FeatureManagement;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = "Endpoint=https://vf-appconfig-1.azconfig.io;Id=FWRi-l9-s0:o5JuVknRx5M/kXMEP4Re;Secret=EI8RBDKu9AmtCARnEYVmvdd2Chvv/qJC0bRqyyzDzyM=";
 
-builder.Host.ConfigureAppConfiguration(opt => opt.AddAzureAppConfiguration(connectionString));
+builder.Host.ConfigureAppConfiguration(opt => opt.AddAzureAppConfiguration(o =>
+    o.Connect(connectionString).UseFeatureFlags()));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddTransient<IProductService, ProductService>();
+builder.Services.AddFeatureManagement();
 
 var app = builder.Build();
 

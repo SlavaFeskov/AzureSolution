@@ -1,20 +1,28 @@
 ﻿using System.Data.SqlClient;
 using AzureWebApp.Models;
+using Microsoft.FeatureManagement;
 
 namespace AzureWebApp.Services;
 
 public class ProductService : IProductService
 {
     private readonly IConfiguration _configuration;
+    private readonly IFeatureManager _featureManager;
 
-    public ProductService(IConfiguration configuration)
+    public ProductService(IConfiguration configuration, IFeatureManager featureManager)
     {
         this._configuration = configuration;
+        _featureManager = featureManager;
     }
 
     private SqlConnection GetConnection()
     {
         return new SqlConnection(_configuration["SQLConnection"]);
+    }
+
+    public Task<bool> IsBetaAsync()
+    {
+        return _featureManager.IsEnabledAsync("beta");
     }
 
     public List<Product> GetProducts()

@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using AzureWebApp.Models;
 using AzureWebApp.Services;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Models;
@@ -16,10 +17,16 @@ public class HomeController : Controller
         _productService = productService;
     }
 
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
         var products = _productService.GetProducts();
-        return View(products);
+        var isBeta = await _productService.IsBetaAsync();
+        var model = new IndexModel
+        {
+            Products = products,
+            IsBeta = isBeta
+        };
+        return View(model);
     }
 
     public IActionResult Privacy()
